@@ -1,0 +1,54 @@
+<%- include('../layout', { content: `
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h4 class="fw-bold mb-1 text-gradient">Quản lý Gói tập</h4>
+            <p class="text-muted small mb-0">Thiết lập các gói dịch vụ và thời gian áp dụng.</p>
+        </div>
+        <a href="/admin/packages/add" class="btn btn-primary btn-premium shadow-sm">
+            <i class="fas fa-plus me-2"></i>Thêm Gói tập
+        </a>
+    </div>
+
+    <div class="card-premium p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light small text-uppercase">
+                    <tr>
+                        <th class="ps-3 border-0">Tên Gói tập</th>
+                        <th class="border-0">Thời lượng</th>
+                        <th class="border-0">Giá</th>
+                        <th class="border-0">Trạng thái</th>
+                        <th class="border-0 text-end pe-3">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${packages.map(p => `
+                        <tr>
+                            <td class="ps-3">
+                                <div class="fw-bold text-primary">${p.packageName}</div>
+                                <div class="text-muted small">${p.description || 'Không có mô tả'}</div>
+                            </td>
+                            <td><span class="badge bg-light text-dark">${p.duration} ngày</span></td>
+                            <td class="fw-bold text-success">${Number(p.price).toLocaleString('vi-VN')} đ</td>
+                            <td>
+                                <span class="badge rounded-pill bg-${p.status === 'Active' ? 'success' : 'secondary'} bg-opacity-10 text-${p.status === 'Active' ? 'success' : 'secondary'} px-3">
+                                    ${p.status === 'Active' ? 'Hoạt động' : 'Ẩn'}
+                                </span>
+                            </td>
+                            <td class="text-end pe-3">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <form action="/admin/packages/${p._id}?_method=DELETE" method="POST" class="d-inline">
+                                        <button class="btn btn-sm btn-light rounded-circle p-2 hover-float" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                            <i class="fas fa-trash-alt text-danger"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('')}
+                    ${packages.length === 0 ? '<tr><td colspan="5" class="text-center py-5 text-muted">Chưa có gói tập nào</td></tr>' : ''}
+                </tbody>
+            </table>
+        </div>
+    </div>
+` }) %>

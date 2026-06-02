@@ -1,0 +1,91 @@
+<%- include('../shared/dashboard-layout', { 
+    title: 'Bảng điều khiển Hội viên',
+    sidebar: `
+        <a href="/profile" class="nav-link active"><i class="fas fa-home"></i> Tổng quan</a>
+        <a href="/packages" class="nav-link"><i class="fas fa-box"></i> Gói tập của tôi</a>
+        <a href="/news" class="nav-link"><i class="fas fa-newspaper"></i> Tin tức</a>
+        <a href="/about" class="nav-link"><i class="fas fa-info-circle"></i> Về chúng tôi</a>
+    `,
+    content: `
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card p-4 border-0 bg-primary text-white">
+                    <div class="small opacity-75 mb-1">Gói hiện tại</div>
+                    <h3 class="fw-bold">${activeSubscription ? activeSubscription.package.packageName : 'Chưa đăng ký'}</h3>
+                    <div class="mt-3">
+                        <span class="badge bg-white text-primary">
+                            ${activeSubscription ? 'Còn ' + Math.ceil((new Date(activeSubscription.endDate) - new Date()) / (1000 * 60 * 60 * 24)) + ' ngày' : 'N/A'}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-4 border-0">
+                    <div class="small text-muted mb-1">Tổng buổi đã tập</div>
+                    <h3 class="fw-bold">${schedules.filter(s => s.status === 'Completed').length}</h3>
+                    <div class="text-success small"><i class="fas fa-arrow-up me-1"></i>Hoàn thành tốt</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-4 border-0">
+                    <div class="small text-muted mb-1">Trạng thái tài khoản</div>
+                    <h3 class="fw-bold text-success">${member.user.status === 'Active' ? 'Hoạt động' : 'Bị khóa'}</h3>
+                    <div class="text-muted small">@${member.user.username}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card p-4 border-0">
+                    <h5 class="fw-bold mb-4">Lịch tập sắp tới</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>HLV</th>
+                                    <th>Thời gian</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${schedules.length > 0 ? schedules.map(s => `
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold">${s.trainer.user.fullName}</div>
+                                            <div class="text-muted small">${s.trainer.specialization}</div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold">${new Date(s.startTime).toLocaleDateString()}</div>
+                                            <div class="text-muted small">${new Date(s.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                                        </td>
+                                        <td><span class="badge bg-${s.status === 'Scheduled' ? 'primary' : s.status === 'Completed' ? 'success' : 'danger'}">${s.status === 'Scheduled' ? 'Đã lên lịch' : s.status === 'Completed' ? 'Hoàn thành' : 'Đã hủy'}</span></td>
+                                    </tr>
+                                `).join('') : '<tr><td colspan="3" class="text-center py-4 text-muted">Chưa có lịch tập nào</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card p-4 border-0">
+                    <h5 class="fw-bold mb-4">Thông tin cá nhân</h5>
+                    <div class="mb-3">
+                        <label class="small text-muted d-block">Họ tên</label>
+                        <span class="fw-semibold">${member.user.fullName}</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small text-muted d-block">Email</label>
+                        <span class="fw-semibold">${member.user.email}</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small text-muted d-block">Số điện thoại</label>
+                        <span class="fw-semibold">${member.phone || 'Chưa cập nhật'}</span>
+                    </div>
+                    <hr>
+                    <a href="/packages" class="btn btn-primary w-100 fw-bold py-2 shadow-sm">Gia hạn gói tập</a>
+                </div>
+            </div>
+        </div>
+    `
+}) %>

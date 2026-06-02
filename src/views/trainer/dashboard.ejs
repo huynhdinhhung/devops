@@ -1,0 +1,114 @@
+<%- include('../shared/dashboard-layout', { 
+    title: 'Bảng điều khiển Huấn luyện viên',
+    sidebar: `
+        <a href="/trainer/schedule" class="nav-link active"><i class="fas fa-calendar-check"></i> Lịch dạy</a>
+        <a href="/news" class="nav-link"><i class="fas fa-newspaper"></i> Tin tức</a>
+        <a href="/about" class="nav-link"><i class="fas fa-info-circle"></i> Về hệ thống</a>
+    `,
+    content: `
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card-premium p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-4 me-3">
+                            <i class="fas fa-calendar-check text-primary fa-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small fw-bold text-uppercase">Buổi dạy / Tháng</div>
+                            <h2 class="fw-bold mb-0">${schedules.filter(s => new Date(s.startTime).getMonth() === new Date().getMonth()).length}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-premium p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-info bg-opacity-10 p-3 rounded-4 me-3">
+                            <i class="fas fa-users text-info fa-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small fw-bold text-uppercase">Học viên</div>
+                            <h2 class="fw-bold mb-0">${[...new Set(schedules.map(s => s.member._id.toString()))].length}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-premium p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-4 me-3">
+                            <i class="fas fa-running text-success fa-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small fw-bold text-uppercase">Hôm nay</div>
+                            <h2 class="fw-bold mb-0">${schedules.filter(s => new Date(s.startTime).toDateString() === new Date().toDateString()).length}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-premium p-4 text-center">
+                    <div class="text-muted small fw-bold text-uppercase mb-1">Đánh giá</div>
+                    <div class="h3 fw-bold text-warning mb-0">4.9 <i class="fas fa-star fs-5"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-premium p-4 overflow-hidden">
+            <h5 class="fw-bold mb-4">Lịch dạy chi tiết</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Hội viên</th>
+                            <th>Thời gian</th>
+                            <th>Trạng thái</th>
+                            <th>Ghi chú</th>
+                            <th class="text-end">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${schedules.map(s => `
+                            <tr>
+                                <td>
+                                    <div class="fw-bold text-primary">${s.member.user.fullName}</div>
+                                    <div class="text-muted small">${s.member.phone || 'Chưa có SĐT'}</div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold">${new Date(s.startTime).toLocaleDateString('vi-VN')}</div>
+                                    <div class="text-muted small">
+                                        ${new Date(s.startTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})} - 
+                                        ${new Date(s.endTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill bg-${s.status === 'Scheduled' ? 'primary' : s.status === 'Completed' ? 'success' : 'danger'} bg-opacity-10 text-${s.status === 'Scheduled' ? 'primary' : s.status === 'Completed' ? 'success' : 'danger'} p-2 px-3">
+                                        ${s.status === 'Scheduled' ? 'Đã lên lịch' : s.status === 'Completed' ? 'Hoàn thành' : 'Đã hủy'}
+                                    </span>
+                                </td>
+                                <td><small class="text-muted">${s.description || '-'}</small></td>
+                                <td class="text-end">
+                                    ${s.status === 'Scheduled' ? `
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <form action="/trainer/schedule/${s._id}/status" method="POST">
+                                                <input type="hidden" name="status" value="Completed">
+                                                <button type="submit" class="btn btn-sm btn-success rounded-pill px-3 shadow-sm hover-float">Xong</button>
+                                            </form>
+                                            <form action="/trainer/schedule/${s._id}/status" method="POST">
+                                                <input type="hidden" name="status" value="Cancelled">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 hover-float">Hủy</button>
+                                            </form>
+                                        </div>
+                                    ` : `
+                                        <i class="fas fa-check-circle text-muted"></i>
+                                    `}
+                                </td>
+                            </tr>
+                        `).join('')}
+                        ${schedules.length === 0 ? '<tr><td colspan="4" class="text-center py-5 text-muted">Bạn chưa có lịch dạy nào.</td></tr>' : ''}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `
+}) %>

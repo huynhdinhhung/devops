@@ -1,0 +1,14 @@
+node_modules
+.env
+*.tar.gz
+npm-debug.log
+.DS_Store
+coverage
+dist
+buildnode_modules
+.env
+npm-debug.log
+.DS_Store
+coverage
+dist
+build

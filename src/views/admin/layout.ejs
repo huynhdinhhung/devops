@@ -1,0 +1,39 @@
+<%- include('../shared/dashboard-layout', { 
+    title: title,
+    sidebar: `
+        <a href="/admin" class="nav-link ${title === 'Bảng điều khiển' ? 'active' : ''}">
+            <i class="fas fa-chart-line"></i> Bảng điều khiển
+        </a>
+        <a href="/admin/members" class="nav-link ${title === 'Hội viên' ? 'active' : ''}">
+            <i class="fas fa-users"></i> Hội viên
+        </a>
+        ${user.role === 'Admin' ? `
+            <a href="/admin/trainers" class="nav-link ${title === 'Huấn luyện viên' ? 'active' : ''}">
+                <i class="fas fa-user-tie"></i> Huấn luyện viên
+            </a>
+        ` : ''}
+        <a href="/admin/packages" class="nav-link ${title === 'Gói tập' ? 'active' : ''}">
+            <i class="fas fa-box"></i> Gói tập
+        </a>
+        <a href="/admin/schedules" class="nav-link ${title === 'Lịch tập' ? 'active' : ''}">
+            <i class="fas fa-calendar-alt"></i> Lịch tập
+        </a>
+        <a href="/admin/equipment" class="nav-link ${title === 'Thiết bị' ? 'active' : ''}">
+            <i class="fas fa-tools"></i> Thiết bị
+        </a>
+        <a href="/admin/attendance" class="nav-link ${title === 'Điểm danh' ? 'active' : ''}">
+            <i class="fas fa-clock"></i> Điểm danh
+        </a>
+        <a href="/admin/posts" class="nav-link ${title === 'Tin tức & Blog' ? 'active' : ''}">
+            <i class="fas fa-newspaper"></i> Tin tức & Blog
+        </a>
+        <div class="px-4 mt-4">
+            <a href="/admin/reports/revenue" class="btn btn-primary btn-sm w-100 rounded-pill">
+                <i class="fas fa-file-pdf me-2"></i>Xuất báo cáo
+            </a>
+        </div>
+        <hr class="mx-4 my-4 opacity-10">
+        <a href="/" class="nav-link small"><i class="fas fa-external-link-alt"></i> Xem trang chủ</a>
+    `,
+    content: content
+}) %>

@@ -1,0 +1,53 @@
+<%- include('../layout', { content: `
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-5">
+                <h4 class="fw-bold mb-4">Add New Trainer</h4>
+                <form action="/admin/trainers/add" method="POST">
+                    <h6 class="text-primary fw-bold mb-3">Account Information</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Username</label>
+                            <input type="text" name="username" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Full Name</label>
+                            <input type="text" name="fullName" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <h6 class="text-primary fw-bold mb-3 border-top pt-3">Professional Details</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Specialization</label>
+                            <input type="text" name="specialization" class="form-control" placeholder="e.g. Bodybuilding, Yoga">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Certificate</label>
+                            <input type="text" name="certificate" class="form-control" placeholder="e.g. NASM CPT">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Hire Date</label>
+                        <input type="date" name="hireDate" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4 fw-bold">Register Trainer</button>
+                        <a href="/admin/trainers" class="btn btn-light px-4">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+` }) %>

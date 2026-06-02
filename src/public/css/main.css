@@ -1,0 +1,99 @@
+/* Premium Design System */
+:root {
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-premium: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.hero-section {
+    background: var(--primary-gradient);
+    border-radius: 2rem;
+    position: relative;
+    overflow: hidden;
+    color: white;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.card-premium {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: var(--shadow-premium);
+}
+
+.card-premium:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.pricing-card {
+    border: none;
+    border-radius: 24px;
+    padding: 2rem;
+}
+
+.pricing-card.featured {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.pricing-card.featured .btn-outline-primary {
+    background: white;
+    color: var(--primary-color);
+    border: none;
+}
+
+.btn-premium {
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn-premium-primary {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+}
+
+.btn-premium-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+}
+
+.glass-nav {
+    background: rgba(15, 23, 42, 0.9) !important;
+    backdrop-filter: blur(8px);
+}
+
+/* Micro-animations */
+.hover-float:hover {
+    transform: translateY(-5px);
+}
+
+.text-gradient {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

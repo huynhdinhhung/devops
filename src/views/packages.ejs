@@ -1,0 +1,40 @@
+<%- include('shared/header') %>
+
+<main class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold">Chọn Gói Tập <span class="text-gradient">Phù Hợp</span></h2>
+        <p class="text-muted">Đầu tư vào sức khỏe của bạn ngay hôm nay với các lựa chọn linh hoạt.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <% if (packages && packages.length > 0) { %>
+            <% packages.forEach((p, index) => { %>
+                <div class="col-md-4">
+                    <div class="card-premium pricing-card h-100 text-center shadow-lg <%= index === 1 ? 'featured' : '' %>">
+                        <h4 class="fw-bold mb-3"><%= p.packageName %></h4>
+                        <div class="mb-4">
+                            <span class="display-5 fw-bold"><%= Number(p.price).toLocaleString('vi-VN') %></span>
+                            <span class="text-muted small"> đ / <%= p.duration %> ngày</span>
+                        </div>
+                        <ul class="list-unstyled mb-5 text-start ps-4">
+                            <li class="mb-2"><i class="fas fa-check text-primary me-2"></i>Truy cập đầy đủ thiết bị</li>
+                            <li class="mb-2"><i class="fas fa-check text-primary me-2"></i>Huấn luyện viên hướng dẫn</li>
+                            <li class="mb-2"><i class="fas fa-check text-primary me-2"></i>Lớp học yoga miễn phí</li>
+                        </ul>
+                        <div class="mt-auto px-3">
+                            <a href="/enroll/<%= p._id %>" class="btn <%= index === 1 ? 'btn-light' : 'btn-primary' %> btn-premium w-100 shadow-sm">
+                                Bắt Đầu Ngay
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Hiện chưa có gói tập nào khả dụng. Vui lòng quay lại sau!</p>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<%- include('shared/footer') %>

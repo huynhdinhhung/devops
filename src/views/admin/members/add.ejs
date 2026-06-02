@@ -1,0 +1,66 @@
+<%- include('../layout', { content: `
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-5">
+                <h4 class="fw-bold mb-4">Add New Member</h4>
+                
+                ${typeof error !== 'undefined' ? `<div class="alert alert-danger">${error}</div>` : ''}
+
+                <form action="/admin/members/add" method="POST">
+                    <h6 class="text-primary fw-bold mb-3">Account Information</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Username</label>
+                            <input type="text" name="username" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Full Name</label>
+                            <input type="text" name="fullName" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <h6 class="text-primary fw-bold mb-3 border-top pt-3">Profile Details</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Birth Date</label>
+                            <input type="date" name="birthDate" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Gender</label>
+                            <select name="gender" class="form-select">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Phone Number</label>
+                            <input type="text" name="phone" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Address</label>
+                            <input type="text" name="address" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4 fw-bold">Register Member</button>
+                        <a href="/admin/members" class="btn btn-light px-4">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+` }) %>

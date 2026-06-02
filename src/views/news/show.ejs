@@ -1,0 +1,35 @@
+<%- include('../shared/header') %>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="mb-5">
+                <a href="/news" class="btn btn-link text-decoration-none p-0 text-muted mb-4 hover-float"><i class="fas fa-arrow-left me-2"></i>Quay lại Tin tức</a>
+                <h1 class="display-5 fw-bold mb-3"><%= post.title %></h1>
+                <div class="d-flex align-items-center gap-4">
+                    <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3 rounded-pill"><%= post.category %></span>
+                    <span class="text-muted small"><i class="fas fa-user-circle me-1"></i> <%= post.author ? post.author.fullName : 'Quản trị viên' %></span>
+                    <span class="text-muted small"><i class="fas fa-calendar-alt me-1"></i> <%= new Date(post.createdAt).toLocaleDateString('vi-VN') %></span>
+                </div>
+            </div>
+
+            <% if (post.image) { %>
+                <div class="card-premium p-2 mb-5">
+                    <img src="<%= post.image %>" class="w-100 rounded-4 shadow-sm" alt="<%= post.title %>" style="max-height: 500px; object-fit: cover;">
+                </div>
+            <% } %>
+
+            <div class="fs-5 text-dark lh-lg mb-5 p-2" style="white-space: pre-line; text-align: justify;">
+                <%= post.content %>
+            </div>
+
+            <div class="hero-section p-5 rounded-5 text-center shadow-lg">
+                <h3 class="fw-bold mb-3">Bạn đã sẵn sàng tham gia cùng chúng tôi?</h3>
+                <p class="opacity-75 mb-4">Nâng tầm hành trình sức khỏe của bạn với các gói tập cao cấp ngay hôm nay.</p>
+                <a href="/packages" class="btn btn-light btn-premium px-5 shadow-sm">Bắt Đầu Ngay</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('../shared/footer') %>

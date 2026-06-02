@@ -1,0 +1,78 @@
+<%- include('../layout', { content: `
+    <div class="row g-4 overflow-hidden">
+        <div class="col-md-4">
+            <div class="card-premium p-4">
+                <h5 class="fw-bold mb-4 text-gradient">Điểm danh Hội viên</h5>
+                <form action="/admin/attendance/checkin" method="POST">
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-uppercase text-muted">Chọn Hội viên</label>
+                        <select name="memberId" class="form-select select2 rounded-3" required>
+                            <option value="">-- Tìm hội viên --</option>
+                            ${members.map(m => `<option value="${m._id}">${m.user.fullName} (@${m.user.username})</option>`).join('')}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-premium w-100 shadow-sm">
+                        <i class="fas fa-sign-in-alt me-2"></i>Bắt đầu tập
+                    </button>
+                </form>
+            </div>
+            
+            <div class="card-premium p-4 mt-4 bg-primary bg-opacity-5 border-0">
+                <h6 class="fw-bold mb-3"><i class="fas fa-info-circle me-2"></i>Hướng dẫn</h6>
+                <p class="small text-muted mb-0">Chọn hội viên từ danh sách để ghi nhận giờ vào tập. Hệ thống sẽ tự động gửi email nhắc nhở nếu gói tập sắp hết hạn.</p>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card-premium p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0">Hoạt động Hôm nay</h5>
+                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 rounded-pill">
+                        ${records.filter(r => new Date(r.checkInTime).toDateString() === new Date().toDateString()).length} lượt tập
+                    </span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light small text-uppercase">
+                            <tr>
+                                <th class="ps-3 border-0">Hội viên</th>
+                                <th class="border-0 text-center">Giờ Vào</th>
+                                <th class="border-0 text-center">Giờ Ra</th>
+                                <th class="border-0 text-end pe-3">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${records.map(r => `
+                                <tr>
+                                    <td class="ps-3">
+                                        <div class="fw-bold text-primary">${r.member.user.fullName}</div>
+                                        <div class="text-muted small">@${r.member.user.username}</div>
+                                    </td>
+                                    <td class="text-center fw-bold text-success">
+                                        ${new Date(r.checkInTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}
+                                    </td>
+                                    <td class="text-center">
+                                        ${r.checkOutTime 
+                                            ? `<span class="fw-bold text-muted">${new Date(r.checkOutTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}</span>`
+                                            : `<form action="/admin/attendance/checkout/${r._id}" method="POST">
+                                                <button class="btn btn-sm btn-outline-warning rounded-pill px-3">Kết thúc</button>
+                                              </form>`
+                                        }
+                                    </td>
+                                    <td class="text-end pe-3">
+                                        <form action="/admin/attendance/${r._id}?_method=DELETE" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bản ghi này?')">
+                                            <button class="btn btn-sm btn-link text-danger p-0 hover-float">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                            ${records.length === 0 ? '<tr><td colspan="4" class="text-center py-5 text-muted">Chưa có hoạt động điểm danh nào trong hôm nay</td></tr>' : ''}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+` }) %>

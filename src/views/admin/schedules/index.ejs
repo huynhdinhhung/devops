@@ -1,0 +1,65 @@
+<%- include('../layout', { content: `
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h4 class="fw-bold mb-1 text-gradient">Lịch tập Luyện</h4>
+            <p class="text-muted small mb-0">Quản lý lịch hẹn giữa Huấn luyện viên và Hội viên.</p>
+        </div>
+        <a href="/admin/schedules/add" class="btn btn-primary btn-premium shadow-sm">
+            <i class="fas fa-calendar-plus me-2"></i>Tạo Lịch mới
+        </a>
+    </div>
+
+    <div class="card-premium p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light small text-uppercase">
+                    <tr>
+                        <th class="ps-3 border-0">Hội viên</th>
+                        <th class="border-0">Huấn luyện viên</th>
+                        <th class="border-0 text-center">Thời gian</th>
+                        <th class="border-0">Trạng thái</th>
+                        <th class="border-0 text-end pe-3">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${schedules.map(s => `
+                        <tr>
+                            <td class="ps-3">
+                                <div class="fw-bold text-primary">${s.member.user.fullName}</div>
+                                <div class="text-muted small">${s.member.user.email}</div>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-indigo">${s.trainer.user.fullName}</div>
+                                <div class="text-muted small font-italic">${s.trainer.specialization}</div>
+                            </td>
+                            <td class="text-center">
+                                <div class="fw-bold">${new Date(s.startTime).toLocaleDateString('vi-VN')}</div>
+                                <div class="text-muted small">
+                                    ${new Date(s.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - 
+                                    ${new Date(s.endTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                </div>
+                            </td>
+                            <td>
+                                <form action="/admin/schedules/status/${s._id}" method="POST" class="d-inline">
+                                    <select name="status" class="form-select form-select-sm rounded-pill px-3 border-0 shadow-sm fw-bold" onchange="this.form.submit()" style="background-color: rgba(0,0,0,0.05); width: auto;">
+                                        <option value="Scheduled" ${s.status === 'Scheduled' ? 'selected' : ''}>Đã lên lịch</option>
+                                        <option value="Completed" ${s.status === 'Completed' ? 'selected' : ''}>Hoàn thành</option>
+                                        <option value="Cancelled" ${s.status === 'Cancelled' ? 'selected' : ''}>Đã hủy</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td class="text-end pe-3">
+                                <form action="/admin/schedules/${s._id}?_method=DELETE" method="POST" onsubmit="return confirm('Xác nhận xóa lịch tập này?')">
+                                    <button class="btn btn-sm btn-light rounded-circle p-2 hover-float">
+                                        <i class="fas fa-trash-alt text-danger"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    `).join('')}
+                    ${schedules.length === 0 ? '<tr><td colspan="5" class="text-center py-5 text-muted">Không tìm thấy lịch tập nào</td></tr>' : ''}
+                </tbody>
+            </table>
+        </div>
+    </div>
+` }) %>

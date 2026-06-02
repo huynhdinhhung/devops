@@ -1,0 +1,48 @@
+<%- include('../layout', { content: `
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h4 class="fw-bold mb-1 text-gradient">Tin tức & Blog</h4>
+            <p class="text-muted small mb-0">Quản lý nội dung bài viết và thông báo hệ thống.</p>
+        </div>
+        <a href="/admin/posts/add" class="btn btn-primary btn-premium shadow-sm">
+            <i class="fas fa-edit me-2"></i>Viết Bài mới
+        </a>
+    </div>
+
+    <div class="card-premium p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light small text-uppercase">
+                    <tr>
+                        <th class="ps-3 border-0">Tiêu đề</th>
+                        <th class="border-0">Danh mục</th>
+                        <th class="border-0">Tác giả</th>
+                        <th class="border-0">Ngày đăng</th>
+                        <th class="border-0 text-end pe-3">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${posts.map(p => `
+                        <tr>
+                            <td class="ps-3">
+                                <div class="fw-bold text-primary">${p.title}</div>
+                                <div class="text-truncate small text-muted" style="max-width: 200px;">${p.content.substring(0, 50)}...</div>
+                            </td>
+                            <td><span class="badge bg-info bg-opacity-10 text-info px-3 rounded-pill">${p.category}</span></td>
+                            <td class="small text-muted"><i class="fas fa-user-circle me-1"></i>${p.author ? p.author.fullName : 'Hệ thống'}</td>
+                            <td class="small text-muted">${new Date(p.createdAt).toLocaleDateString('vi-VN')}</td>
+                            <td class="text-end pe-3">
+                                <form action="/admin/posts/${p._id}?_method=DELETE" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bài viết này?')">
+                                    <button class="btn btn-sm btn-light rounded-circle p-2 hover-float">
+                                        <i class="fas fa-trash-alt text-danger"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    `).join('')}
+                    ${posts.length === 0 ? '<tr><td colspan="5" class="text-center py-5 text-muted">Chưa có bài viết nào trong danh sách</td></tr>' : ''}
+                </tbody>
+            </table>
+        </div>
+    </div>
+` }) %>

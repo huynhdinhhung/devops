@@ -1,0 +1,70 @@
+<%- include('../layout', { content: `
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h4 class="fw-bold mb-1 text-gradient">Thiết bị Phòng tập</h4>
+            <p class="text-muted small mb-0">Quản lý và theo dõi trình trạng bảo trì máy móc.</p>
+        </div>
+        <a href="/admin/equipment/add" class="btn btn-primary btn-premium shadow-sm">
+            <i class="fas fa-plus-circle me-2"></i>Thêm Thiết bị
+        </a>
+    </div>
+
+    <div class="card-premium p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light small text-uppercase">
+                    <tr>
+                        <th class="ps-3 border-0">Tên thiết bị</th>
+                        <th class="border-0">Loại</th>
+                        <th class="border-0">Bảo trì kế tiếp</th>
+                        <th class="border-0">Trạng thái</th>
+                        <th class="border-0 text-end pe-3">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${equipment.map(e => {
+                        const statusClass = e.status === 'Functional' ? 'success' : e.status === 'Under Repair' ? 'warning' : 'danger';
+                        const statusText = e.status === 'Functional' ? 'Đang hoạt động' : e.status === 'Under Repair' ? 'Đang sửa chữa' : 'Đang hỏng';
+                        return `
+                            <tr>
+                                <td class="ps-3">
+                                    <div class="fw-bold">${e.name}</div>
+                                    <div class="text-muted small">${e.description || 'Không có mô tả'}</div>
+                                </td>
+                                <td><span class="badge bg-light text-dark">${e.type}</span></td>
+                                <td>
+                                    <div class="${e.nextMaintenance && new Date(e.nextMaintenance) < new Date() ? 'text-danger fw-bold' : 'text-muted'}">
+                                        <i class="fas fa-clock-rotate-left me-1"></i>
+                                        ${e.nextMaintenance ? new Date(e.nextMaintenance).toLocaleDateString('vi-VN') : 'N/A'}
+                                    </div>
+                                </td>
+                                <td>
+                                    <form action="/admin/equipment/status/${e._id}" method="POST" class="d-inline">
+                                        <select name="status" class="form-select form-select-sm rounded-pill px-3 border-status-${statusClass} text-${statusClass} fw-bold" onchange="this.form.submit()">
+                                            <option value="Functional" ${e.status === 'Functional' ? 'selected' : ''}>Hoạt động tốt</option>
+                                            <option value="Under Repair" ${e.status === 'Under Repair' ? 'selected' : ''}>Đang sửa chữa</option>
+                                            <option value="Broken" ${e.status === 'Broken' ? 'selected' : ''}>Hỏng</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td class="text-end pe-3">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a href="/admin/equipment/edit/${e._id}" class="btn btn-sm btn-light rounded-circle p-2 hover-float">
+                                            <i class="fas fa-edit text-primary"></i>
+                                        </a>
+                                        <form action="/admin/equipment/${e._id}?_method=DELETE" method="POST" onsubmit="return confirm('Xác nhận xóa thiết bị này?')">
+                                            <button class="btn btn-sm btn-light rounded-circle p-2 hover-float">
+                                                <i class="fas fa-trash-alt text-danger"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                    ${equipment.length === 0 ? '<tr><td colspan="5" class="text-center py-5 text-muted">Không tìm thấy thiết bị nào trong kho</td></tr>' : ''}
+                </tbody>
+            </table>
+        </div>
+    </div>
+` }) %>
