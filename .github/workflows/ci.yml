@@ -1,0 +1,63 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  ci:
+    name: Install and Check
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:8
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      PORT: 3000
+      MONGODB_URI: mongodb://127.0.0.1:27017/GymManage
+      SESSION_SECRET: github_actions_secret
+      MOMO_PARTNER_CODE: test
+      MOMO_ACCESS_KEY: test
+      MOMO_SECRET_KEY: test
+      EMAIL_HOST: smtp.gmail.com
+      EMAIL_PORT: 587
+      EMAIL_USER: test@example.com
+      EMAIL_PASS: test
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check server.js
+          find src -name "*.js" -type f -print0 | xargs -0 -n1 node --check
+
+      - name: Start app smoke test
+        run: |
+          node server.js &
+          sleep 8
+          curl -I http://127.0.0.1:3000
