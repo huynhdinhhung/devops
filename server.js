@@ -20,6 +20,14 @@ cronService.initCronJobs();
 
 const app = express();
 
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'gymmanage',
+    uptime: process.uptime()
+  });
+});
+
 // Middleware
 app.use(morgan('dev'));
 app.use(express.json());
