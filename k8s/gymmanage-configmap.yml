@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gymmanage-config
+  namespace: gymmanage
+data:
+  PORT: "3003"
+  MONGODB_URI: "mongodb://127.0.0.1:27017/GymManage"
+  MOMO_PARTNER_CODE: "test"
+  MOMO_ACCESS_KEY: "test"
+  EMAIL_HOST: "smtp.gmail.com"
+  EMAIL_PORT: "587"
+  EMAIL_USER: "test@example.com"
