@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gymmanage
+  namespace: gymmanage
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: gymmanage
+  template:
+    metadata:
+      labels:
+        app: gymmanage
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: gymmanage
+          image: docker.io/library/gymmanage-app:k3s
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3003
+          env:
+            - name: PORT
+              value: "3003"
+            - name: MONGODB_URI
+              value: "mongodb://127.0.0.1:27017/GymManage"
+            - name: SESSION_SECRET
+              value: "your_very_secret_session_key"
+            - name: MOMO_PARTNER_CODE
+              value: "test"
+            - name: MOMO_ACCESS_KEY
+              value: "test"
+            - name: MOMO_SECRET_KEY
+              value: "test"
+            - name: EMAIL_HOST
+              value: "smtp.gmail.com"
+            - name: EMAIL_PORT
+              value: "587"
+            - name: EMAIL_USER
+              value: "test@example.com"
+            - name: EMAIL_PASS
+              value: "test"
