@@ -19,7 +19,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: gymmanage
-          image: docker.io/hung16/gymmanage-app:e8b6901
+          image: docker.io/hung16/gymmanage-app:b5dc6a0
           imagePullPolicy: Always
           ports:
             - containerPort: 3003
