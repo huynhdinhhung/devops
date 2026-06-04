@@ -19,10 +19,26 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: gymmanage
-          image: docker.io/hung16/gymmanage-app:5d3095d
+          image: docker.io/hung16/gymmanage-app:b5dc6a0
           imagePullPolicy: Always
           ports:
             - containerPort: 3003
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3003
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3003
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
           envFrom:
             - configMapRef:
                 name: gymmanage-config
