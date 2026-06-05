@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/huynhdinhhung/devops.git
     targetRevision: main
-    path: k8s
+    path: k8s/gymmanage
 
   destination:
     server: https://kubernetes.default.svc
