@@ -1,14 +1,41 @@
 const Member = require('../../models/Member');
 const User = require('../../models/User');
 
-// @desc    Get all members
+// @desc    Get all members (with optional search & status filter)
 // @route   GET /admin/members
 exports.getMembers = async (req, res) => {
     try {
-        const members = await Member.find().populate('user').sort({ createdAt: -1 });
+        const { q, status } = req.query;
+        let members;
+
+        const hasFilter = (q && q.trim()) || status;
+        if (hasFilter) {
+            const userFilter = {};
+            if (q && q.trim()) {
+                const keyword = q.trim();
+                userFilter.$or = [
+                    { fullName: { $regex: keyword, $options: 'i' } },
+                    { email: { $regex: keyword, $options: 'i' } },
+                    { username: { $regex: keyword, $options: 'i' } }
+                ];
+            }
+            if (status) {
+                userFilter.status = status;
+            }
+
+            const users = await User.find(userFilter).select('_id');
+            const userIds = users.map(u => u._id);
+            members = await Member.find({ user: { $in: userIds } })
+                .populate('user')
+                .sort({ createdAt: -1 });
+        } else {
+            members = await Member.find().populate('user').sort({ createdAt: -1 });
+        }
+
         res.render('admin/members/index', { 
-            title: 'Manage Members', 
-            members, 
+            title: 'Hội viên', 
+            members,
+            query: { q: q || '', status: status || '' },
             layout: 'admin/layout' 
         });
     } catch (err) {
